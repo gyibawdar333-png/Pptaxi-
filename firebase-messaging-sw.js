@@ -1,33 +1,40 @@
-importScripts('https://www.gstatic.com/firebasejs/10.x.x/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.x.x/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
-firebase.initializeApp({
-  apiKey: "...",
-  // သင်ပြထားတဲ့ config ထဲက data တွေ ဒီမှာပြန်ထည့်ပါ
-});
-
-const messaging = firebase.messaging();
-
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyA9JAq0MQ66MiHCstUExjthYyEyqCVTd98",
+const firebaseConfig = {
+    apiKey: "AIzaSyA9JAq0MQ66MiHCstUExjthVyEyqCvTd98",
     authDomain: "pyapay-a7b10.firebaseapp.com",
     projectId: "pyapay-a7b10",
     storageBucket: "pyapay-a7b10.firebasestorage.app",
     messagingSenderId: "968243507066",
-    appId: "1:968243507066:web:102e7eb153c1c82994b0c3",
-    measurementId: "G-BNVLYJ6LMF"
+    appId: "1:968243507066:web:102e7eb153c1c82394b0c3",
+    measurementId: "G-BNVLYJL6MF"
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  console.log('New Order Received while offline:', payload);
+
+  const notificationTitle = payload.notification.title || "Order အသစ်ရရှိပါသည်";
+  const notificationOptions = {
+    body: payload.notification.body || "Order အသေးစိတ်ကို ကြည့်ရန် နှိပ်ပါ",
+    icon: '/driver-icon.png', // Driver icon logo path
+    badge: '/badge-icon.png',
+    vibrate: [200, 100, 200], // ဖုန်းတုန်ခါမှု
+    data: {
+      url: '/orders' // Notification ကို နှိပ်လိုက်ရင် သွားရမယ့် link
+    }
   };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Notification ကို နှိပ်လိုက်ရင် App ကို ဖွင့်ပေးဖို့
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(event.notification.data.url)
+  );
+});
