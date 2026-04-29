@@ -292,7 +292,7 @@ console.log("Searching for driver token for:", nearestDriverPhone);
 const { data: driverData, error: driverError } = await _supabase
     .from('drivers')
     .select('fcm_token')
-    .eq('driver_phone', nearestDriverPhone.toString().trim()) // နံပါတ်ကို စာသားပြောင်းပြီး space တွေဖြတ်ထားပါတယ်
+    .eq('phone', nearestDriverPhone.toString().trim()) // နံပါတ်ကို စာသားပြောင်းပြီး space တွေဖြတ်ထားပါတယ်
     .maybeSingle(); // single() အစား maybeSingle() သုံးတာ ပိုစိတ်ချရပါတယ်
 
 if (driverError) {
