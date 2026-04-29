@@ -396,7 +396,7 @@
           console.log('Driver Token:', currentToken);
           
           // Supabase ထဲမှာ သိမ်းမယ်
-          const { error } = await supabase
+          const { error } = await _supabase
             .from('drivers') // သင့်ရဲ့ driver table နာမည်
             .update({ fcm_token: currentToken })
             .eq('id', driverId); // လက်ရှိ Login ဝင်ထားတဲ့ Driver ID
