@@ -369,5 +369,51 @@
         function logout() { if(confirm("Logout?")) { localStorage.clear(); location.reload(); } }
         function recenterMap() { map.flyTo([myPos.lat, myPos.lng], 16); document.getElementById('recenter-btn').style.display = 'none'; }
     </script>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+  // Supabase connection code ဒီမှာ ရှိရပါမယ်
+
+  const firebaseConfig = {// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  apiKey: "AIzaSyA9JAq0MQ66MiHCstUExjthYyEyqCVTd98",
+  authDomain: "pyapay-a7b10.firebaseapp.com",
+  projectId: "pyapay-a7b10",
+  storageBucket: "pyapay-a7b10.firebasestorage.app",
+  messagingSenderId: "968243507066",
+  appId: "1:968243507066:web:102e7eb153c1c82994b0c3",
+  measurementId: "G-BNVLYJ6LMF"
+};
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+
+  async function setupDriverNotifications(driverId) {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const currentToken = await getToken(messaging, { 
+          vapidKey: 'YOUR_VAPID_KEY_HERE' 
+        });
+
+        if (currentToken) {
+          console.log('Driver Token:', currentToken);
+          
+          // Supabase ထဲမှာ သိမ်းမယ်
+          const { error } = await supabase
+            .from('drivers') // သင့်ရဲ့ driver table နာမည်
+            .update({ fcm_token: currentToken })
+            .eq('id', driverId); // လက်ရှိ Login ဝင်ထားတဲ့ Driver ID
+
+          if (error) console.error('Error saving token to Supabase:', error);
+          else console.log('Token successfully saved for Driver.');
+        }
+      }
+    } catch (err) {
+      console.log('Notification setup failed:', err);
+    }
+  }
+
+  // Driver Login ဝင်ပြီးတာနဲ့ ဒီ function ကို ခေါ်ပေးပါ
+  // setupDriverNotifications('driver_uuid_here');
+</script>
 </body>
 </html>
