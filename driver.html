@@ -143,7 +143,7 @@
     <script>
         const SUPABASE_URL = 'https://qvnrrqjhzgaulfvrjcay.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2bnJycWpoemdhdWxmdnJqY2F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTUwMDUsImV4cCI6MjA4ODA5MTAwNX0.ItRRfDMI7Go0F1kCJTXOzYrY620PpSMx_iy3qfXBxTc';
-
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let map, myMarker, userMarker, isOnline = false, pollInterval;
         let myPos = { lat: 21.95, lng: 96.08 }, activeJob = null, driverId = null, driverData = null;
         let appSettings = { comm: 20, platform: 500 };
