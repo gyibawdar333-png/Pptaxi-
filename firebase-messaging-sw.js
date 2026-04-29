@@ -1,13 +1,14 @@
+// Version ကို ၁၀.၁၂.၀ လို့ အသေပြောင်းလဲလိုက်ပါ
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
 firebase.initializeApp({
-  apiKey: "AIzaSyA9JAq0MQ66MiHCstUExjthVyEyqCvTd98",
-  authDomain: "pyapay-a7b10.firebaseapp.com",
-  projectId: "pyapay-a7b10",
-  storageBucket: "pyapay-a7b10.firebasestorage.app",
-  messagingSenderId: "968243507066",
-  appId: "1:968243507066:web:102e7eb153c1c82394b0c3"
+    apiKey: "AIzaSyA9JAq0MQ66MiHCstUExjthVyEyqCvTd98",
+    authDomain: "pyapay-a7b10.firebaseapp.com",
+    projectId: "pyapay-a7b10",
+    storageBucket: "pyapay-a7b10.firebasestorage.app",
+    messagingSenderId: "968243507066",
+    appId: "1:968243507066:web:102e7eb153c1c82394b0c3"
 });
 
 const messaging = firebase.messaging();
