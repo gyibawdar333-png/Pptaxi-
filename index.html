@@ -286,22 +286,37 @@
                 fare: currentFare, status: 'pending', 
                 assigned_driver: nearestDriverPhone
             }]).select();
-          // Booking table ထဲ data သွင်းပြီးတဲ့နေရာမှာ ဒါကို ထည့်ပါ
-const { data: driverData } = await _supabase.from('drivers')
+// Booking Insert လုပ်ပြီးတဲ့နေရာမှာ အခုအတိုင်း အစားထိုးပါ
+console.log("Searching for driver token for:", nearestDriverPhone);
+
+const { data: driverData, error: driverError } = await _supabase
+    .from('drivers')
     .select('fcm_token')
-    .eq('driver_phone', nearestDriverPhone) // အနီးဆုံး driver ရဲ့ phone နဲ့ ရှာတာပါ
-    .single();
+    .eq('driver_phone', nearestDriverPhone.toString().trim()) // နံပါတ်ကို စာသားပြောင်းပြီး space တွေဖြတ်ထားပါတယ်
+    .maybeSingle(); // single() အစား maybeSingle() သုံးတာ ပိုစိတ်ချရပါတယ်
+
+if (driverError) {
+    console.error("Database Query Error:", driverError);
+}
 
 if (driverData && driverData.fcm_token) {
-    // Edge Function ကို လှမ်းခေါ်ခြင်း
-    await _supabase.functions.invoke('send-notification', {
-        body: { 
+    console.log("Driver Token Found! Sending Notification...");
+
+    const { data: funcData, error: funcError } = await _supabase.functions.invoke('send-notification', {
+        body: JSON.stringify({ // Body ကို stringify လုပ်လိုက်တာ ပိုသေချာပါတယ်
             driver_token: driverData.fcm_token,
             title: "🚖 ခရီးသည်အသစ် ခေါ်နေပါသည်",
             body: "သင့်အနီးနားတွင် ခရီးသည်တစ်ဦးရှိနေပါသည်။ အမြန်လက်ခံပေးပါ။"
-        }
+        })
     });
-    console.log("Notification sent to driver!");
+
+    if (funcError) {
+        console.error("Notification Function Error:", funcError);
+    } else {
+        console.log("Notification sent successfully! Result:", funcData);
+    }
+} else {
+    console.warn("Could not find FCM token for this driver. Notification not sent.");
 }
             if (!error) {
                 currentBookingId = data[0].id;
