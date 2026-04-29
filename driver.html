@@ -390,7 +390,7 @@
       if (permission === 'granted') {
         const currentToken = await getToken(messaging, { 
           vapidKey: 'BPSWOf95XLpLCtku-1iyl0Dj3iMF_vShs5AcBtafPvo8v2FcdlfjJaDOdC6SXj0B11472qdt5J3n19b0rzYNlHY',
-            serviceWorkerRegistration: await navigator.serviceWorker.register('/Pptaxi-/firebase-messaging-sw.js')
+            serviceWorkerRegistration: await navigator.serviceWorker.register('firebase-messaging-sw.js')
         });
 
         if (currentToken) {
