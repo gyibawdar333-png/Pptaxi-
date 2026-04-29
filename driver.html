@@ -372,6 +372,21 @@
     <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+        import { onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+
+// App ဖွင့်ထားတုန်း Message ရောက်လာရင် လုပ်ဆောင်မည့်အချက်
+onMessage(messaging, (payload) => {
+    console.log('Message received: ', payload);
+    
+    // ရိုးရိုး Notification ပုံစံ ပေါ်လာအောင် လုပ်ခြင်း
+    new Notification(payload.notification.title, {
+        body: payload.notification.body,
+        icon: '/favicon.ico'
+    });
+    
+    // မျက်နှာပြင်မှာ Alert ပြခြင်း
+    alert(payload.notification.title + ": " + payload.notification.body);
+});
   const firebaseConfig = {// For Firebase JS SDK v7.20.0 and later, measurementId is optional
   apiKey: "AIzaSyA9JAq0MQ66MiHCstUExjthYyEyqCVTd98",
   authDomain: "pyapay-a7b10.firebaseapp.com",
