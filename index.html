@@ -286,7 +286,24 @@
                 fare: currentFare, status: 'pending', 
                 assigned_driver: nearestDriverPhone
             }]).select();
+          // Booking table ထဲ data သွင်းပြီးတဲ့နေရာမှာ ဒါကို ထည့်ပါ
+const { data: driverData } = await _supabase
+    .from('drivers')
+    .select('fcm_token')
+    .eq('driver_phone', nearestDriverPhone) // အနီးဆုံး driver ရဲ့ phone နဲ့ ရှာတာပါ
+    .single();
 
+if (driverData && driverData.fcm_token) {
+    // Edge Function ကို လှမ်းခေါ်ခြင်း
+    await _supabase.functions.invoke('send-notification', {
+        body: { 
+            driver_token: driverData.fcm_token,
+            title: "🚖 ခရီးသည်အသစ် ခေါ်နေပါသည်",
+            body: "သင့်အနီးနားတွင် ခရီးသည်တစ်ဦးရှိနေပါသည်။ အမြန်လက်ခံပေးပါ။"
+        }
+    });
+    console.log("Notification sent to driver!");
+}
             if (!error) {
                 currentBookingId = data[0].id;
                 trackBooking(currentBookingId);
